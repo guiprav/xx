@@ -17,11 +17,14 @@ struct xx_option {
     fputc('\n', stderr); \
     exit(-1)
 
+#define xx_calloc_auto(n, ptr) (calloc(n, sizeof(*ptr)))
+
+#define xx_fread_auto(ptr, n, f) (fread(ptr, sizeof(*ptr), n, f))
 
 #define xx_fwrite_auto(ptr, n, f) (fwrite(ptr, sizeof(*ptr), n, f))
 
-void xx_read(int argc, char **argv) {
-    xx_die("Not implemented.");
+int xx_strprefixed(const char *str, const char *prefix) {
+    return (strncmp(prefix, str, strlen(prefix)) == 0);
 }
 
 const char *xx_strtok(char *str) {
@@ -192,6 +195,427 @@ double xx_strtofloat64(const char *str) {
 
     parse_error:
     xx_die("'%s' can't be float64.", str);
+}
+
+int xx_read_pcstr(int argc, char **argv) {
+    assert(argc >= 1);
+
+    int field_len = xx_strtoint32(argv[0]);
+
+    char *buf = 0;
+    size_t buf_len = 0;
+
+    ssize_t read_len = getdelim(&buf, &buf_len, 0, stdin);
+    assert(read_len != -1);
+
+    for(int i = read_len; i < field_len; ++i) {
+        assert(fgetc(stdin) != EOF);
+    }
+
+    puts(buf);
+
+    free(buf);
+
+    return 1;
+}
+
+int xx_read_cstr(int argc, char **argv) {
+    char *buf = 0;
+    size_t buf_len = 0;
+
+    assert(getdelim(&buf, &buf_len, 0, stdin) != -1);
+
+    puts(buf);
+
+    free(buf);
+
+    return 0;
+}
+
+int xx_read_char(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = (int)(xx_strtouint32(argv[0]));
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    char *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    puts(buf);
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_uint8(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    uint8_t *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%d", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_int8(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    int8_t *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%d", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_uint16(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    uint16_t *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%d", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_int16(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    int16_t *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%d", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_uint32(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    uint32_t *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%u", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_int32(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    int32_t *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%d", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_float32(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    float *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%f", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+int xx_read_float64(int argc, char **argv) {
+    int consumed = 0;
+
+    int n = 1;
+
+    if(argc >= 1 && !xx_strprefixed(argv[0], "--")) {
+        n = xx_strtoint32(argv[0]);
+        assert(n >= 0);
+
+        ++consumed;
+    }
+
+    if(n == 0) {
+        return consumed;
+    }
+
+    double *buf = xx_calloc_auto(n, buf);
+    assert(buf);
+
+    assert(xx_fread_auto(buf, n, stdin) == n);
+
+    for(int i = 0; i < n; ++i) {
+        printf("%f", buf[i]);
+
+        if(i < n - 1) {
+            printf(",");
+        }
+    }
+
+    printf("\n");
+
+    free(buf);
+
+    return consumed;
+}
+
+struct xx_option xx_read_options[] = {
+    {
+        .name = "--pcstr",
+        .handler = xx_read_pcstr
+    },
+    {
+        .name = "--cstr",
+        .handler = xx_read_cstr
+    },
+    {
+        .name = "--char",
+        .handler = xx_read_char
+    },
+    {
+        .name = "--uint8",
+        .handler = xx_read_uint8
+    },
+    {
+        .name = "--int8",
+        .handler = xx_read_int8
+    },
+    {
+        .name = "--uint16",
+        .handler = xx_read_uint16
+    },
+    {
+        .name = "--int16",
+        .handler = xx_read_int16
+    },
+    {
+        .name = "--uint32",
+        .handler = xx_read_uint32
+    },
+    {
+        .name = "--int32",
+        .handler = xx_read_int32
+    },
+    {
+        .name = "--float32",
+        .handler = xx_read_float32
+    },
+    {
+        .name = "--float64",
+        .handler = xx_read_float64
+    }
+};
+
+int xx_read_option_count = (
+    sizeof(xx_read_options) / sizeof(xx_read_options[0])
+);
+
+void xx_read(int argc, char **argv) {
+    setvbuf(stdin, 0, _IONBF, 0);
+
+    for(int i = 0; i < argc; ++i) {
+        const char *name = argv[i];
+
+        for(int j = 0; j < xx_read_option_count; ++j) {
+            struct xx_option *option = &xx_read_options[j];
+
+            if(strcmp(option->name, name) == 0) {
+                i += option->handler(argc - i - 1, argv + i + 1);
+                goto next_arg;
+            }
+        }
+
+        xx_die("Invalid read option: %s\n", name);
+
+        next_arg:;
+    }
 }
 
 FILE *f;
