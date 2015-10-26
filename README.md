@@ -1,6 +1,27 @@
 # xx
 
-No time to explain. Code is worth a thousand words.
+xx is a binary stream read / write utility for shell scripting and other joys of life.
+
+## Example usage
+
+    $ xx --char "xx is nice" >example
+
+    $ cat example
+    xx is nice
+
+    $ xx --int32 12345 --uint8 1,2,3,4,5 >example
+
+    $ xxd example
+    00000000: 3930 0000 0102 0304 05                   90.......
+
+    $ xx -r --int32 --uint8 5 <example
+    12345
+    1,2,3,4,5
+
+    $ xx --uint16 65535 |xx -r --int16
+    -1
+
+Etc.
 
 ## License
 
