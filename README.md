@@ -23,6 +23,8 @@ xx is a binary stream read / write utility for shell scripting and other joys of
 
 Etc.
 
+*Note: [xxd(1)](http://linux.die.net/man/1/xxd) is not part of this project.*
+
 ## License
 
 ![](https://www.gnu.org/graphics/agplv3-155x51.png)
