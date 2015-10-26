@@ -27,16 +27,6 @@ int xx_strprefixed(const char *str, const char *prefix) {
     return (strncmp(prefix, str, strlen(prefix)) == 0);
 }
 
-const char *xx_strtok(char *str) {
-    const char *token = strtok(str, ",");
-
-    if(str != 0 && token == 0) {
-        token = "";
-    }
-
-    return token;
-}
-
 uint8_t xx_strtouint8(const char *str) {
     if(str[0] == 0) {
         goto parse_error;
@@ -283,7 +273,7 @@ int xx_read_uint8(int argc, char **argv) {
         printf("%d", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -319,7 +309,7 @@ int xx_read_int8(int argc, char **argv) {
         printf("%d", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -355,7 +345,7 @@ int xx_read_uint16(int argc, char **argv) {
         printf("%d", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -391,7 +381,7 @@ int xx_read_int16(int argc, char **argv) {
         printf("%d", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -427,7 +417,7 @@ int xx_read_uint32(int argc, char **argv) {
         printf("%u", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -463,7 +453,7 @@ int xx_read_int32(int argc, char **argv) {
         printf("%d", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -499,7 +489,7 @@ int xx_read_float32(int argc, char **argv) {
         printf("%f", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -535,7 +525,7 @@ int xx_read_float64(int argc, char **argv) {
         printf("%f", buf[i]);
 
         if(i < n - 1) {
-            printf(",");
+            printf(" ");
         }
     }
 
@@ -658,113 +648,153 @@ int xx_write_char(int argc, char **argv) {
 int xx_write_uint8(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        uint8_t value = xx_strtouint8(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        uint8_t value = xx_strtouint8(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 int xx_write_int8(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        int8_t value = xx_strtoint8(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        int8_t value = xx_strtoint8(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 int xx_write_uint16(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        uint16_t value = xx_strtouint16(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        uint16_t value = xx_strtouint16(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 int xx_write_int16(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        int16_t value = xx_strtoint16(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        int16_t value = xx_strtoint16(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 int xx_write_uint32(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        uint32_t value = xx_strtouint32(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        uint32_t value = xx_strtouint32(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 int xx_write_int32(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        int32_t value = xx_strtoint32(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        int32_t value = xx_strtoint32(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 int xx_write_float32(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        float value = xx_strtofloat32(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        float value = xx_strtofloat32(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 int xx_write_float64(int argc, char **argv) {
     assert(argc >= 1);
 
-    const char *token = xx_strtok(argv[0]);
+    int i;
 
-    do {
-        double value = xx_strtofloat64(token);
+    for(i = 0; i < argc; ++i) {
+        if(xx_strprefixed(argv[i], "--")) {
+            assert(i > 0);
+            break;
+        }
+
+        double value = xx_strtofloat64(argv[i]);
 
         assert(xx_fwrite_auto(&value, 1, f) == 1);
-    } while(token = xx_strtok(0));
+    }
 
-    return 1;
+    return i;
 }
 
 struct xx_option xx_write_options[] = {
