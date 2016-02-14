@@ -148,6 +148,18 @@ unsigned xx_strtoul(const char *nptr, char **endptr) {
     }
 {{/each}}
 
+int xx_read_skip(int argc, char **argv) {
+    assert(argc >= 1);
+
+    int len = xx_strtoint32(argv[0]);
+
+    for(int i = 0; i < len; ++i) {
+        assert(fgetc(stdin) != EOF);
+    }
+
+    return 1;
+}
+
 {{#each scalars}}
     int xx_read_{{@key}}(int argc, char **argv) {
         int consumed = 0;
@@ -250,6 +262,10 @@ int xx_read_char(int argc, char **argv) {
 }
 
 struct xx_option xx_read_options[] = {
+    {
+        .name = "--skip",
+        .handler = xx_read_skip
+    },
     {{#each scalars}}
         {
             .name = "--{{@key}}",
